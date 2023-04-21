@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { RegisterSchema } from "../../schemas";
-import "./loading.css";
+import Loading from "../Loading";
 
 import axios from "axios";
 // icon
@@ -19,6 +19,7 @@ import { UserContext } from "../../Context/UserContext";
 const Register = () => {
   const { setUser, setFirstName, setLastName } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // forms
   const formik = useFormik({
@@ -41,10 +42,10 @@ const Register = () => {
           password: data.password,
         })
         .then(response => {
-          console.log(response);
           setFirstName(data.firstname);
           setLastName(data.lastname);
           setUser(true);
+          navigate("/");
           toast.success("Registration sucessfully!");
           setLoading(false);
         })
@@ -203,13 +204,9 @@ const Register = () => {
             </div>
           </div>
           {loading ? (
-            <>
-              <h1 class="title">Loading</h1>
-              <div class="rainbow-marker-loader"></div>
-            </>
+            <Loading />
           ) : (
             <button
-              disabled={formik.isSubmitting}
               type="submit"
               className="submit-btn"
               style={{ cursor: "pointer" }}

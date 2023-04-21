@@ -9,7 +9,7 @@ import {
 import { LoginSchema } from "../../schemas";
 import axios from "axios";
 import { toast } from "react-toastify";
-import "./loading.css";
+import Loading from "../Loading";
 
 import Nuki from "../../../assets/Extra/nuki.webp";
 
@@ -19,6 +19,7 @@ import { UserContext } from "../../Context/UserContext";
 const Login = () => {
   const { setUser, setFirstName, setLastName } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -38,6 +39,7 @@ const Login = () => {
           setFirstName(response.data.firstName);
           setLastName(response.data.lastName);
           setUser(true);
+          navigate("/");
           toast.success("Login sucessfully!");
           setLoading(false);
         })
@@ -155,13 +157,9 @@ const Login = () => {
             </div>
           </div>
           {loading ? (
-            <>
-              <h1 class="title">Loading</h1>
-              <div class="rainbow-marker-loader"></div>
-            </>
+            <Loading />
           ) : (
             <button
-              disabled={formik.isSubmitting}
               type="submit"
               className="submit-btn"
               style={{ cursor: "pointer" }}
